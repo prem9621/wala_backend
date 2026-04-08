@@ -67,44 +67,93 @@ async function initDb() {
   console.log('📦 Inserting menu data...');
 
   await db.query(`
-    INSERT INTO menu_items (name, price, category, is_available)
-    VALUES
+INSERT INTO menu_items (name, price, category, is_available)
+VALUES
 
-    -- 🥘 THALI
-    ('Veg Thali', 120.00, 'Thali', 1),
-    ('Special Thali', 150.00, 'Thali', 1),
-    ('Paneer Thali', 180.00, 'Thali', 1),
-    ('Chicken Thali', 220.00, 'Thali', 1),
+-- 🥘 THALI (from page 2 & 3)
+('Special Veg Thali', 220.00, 'Thali', 1),
+('Regular Plate (Limited)', 140.00, 'Thali', 1),
+('Maharashtrian Thali', 220.00, 'Thali', 1),
+('Punjabi Thali', 200.00, 'Thali', 1),
+('Chicken Thali', 189.00, 'Thali', 1),
+('Mutton Thali', 260.00, 'Thali', 1),
+('Egg Thali', 180.00, 'Thali', 1),
+('Fish Thali', 300.00, 'Thali', 1),
 
-    -- 🍛 CURRY
-    ('Paneer Butter Masala', 160.00, 'Curry', 1),
-    ('Kadai Paneer', 170.00, 'Curry', 1),
-    ('Mix Veg', 140.00, 'Curry', 1),
-    ('Dal Tadka', 120.00, 'Curry', 1),
-    ('Chicken Masala', 200.00, 'Curry', 1),
+-- 🍛 VEG MAIN COURSE (page 7)
+('Paneer Masala', 180.00, 'Curry', 1),
+('Matar Paneer', 180.00, 'Curry', 1),
+('Paneer Butter Masala', 180.00, 'Curry', 1),
+('Kadai Paneer', 180.00, 'Curry', 1),
+('Paneer Lababdar', 200.00, 'Curry', 1),
+('Kaju Paneer', 240.00, 'Curry', 1),
+('Chana Masala', 160.00, 'Curry', 1),
+('Mix Veg Curry', 160.00, 'Curry', 1),
+('Aloo Gobi', 280.00, 'Curry', 1),
+('Aloo Mutter', 160.00, 'Curry', 1),
+('Sev Bhaji', 140.00, 'Curry', 1),
+('Zunka Bhakar Special', 140.00, 'Curry', 1),
+('Shevga Masala', 200.00, 'Curry', 1),
+('Pithla', 120.00, 'Curry', 1),
+('Bharli Vangi', 180.00, 'Curry', 1),
 
-    -- 🍞 ROTI
-    ('Chapati', 15.00, 'Roti', 1),
-    ('Butter Roti', 20.00, 'Roti', 1),
-    ('Naan', 30.00, 'Roti', 1),
-    ('Butter Naan', 40.00, 'Roti', 1),
+-- 🍗 NON VEG MAIN COURSE (page 8)
+('Chicken Kala Masala', 180.00, 'Non Veg', 1),
+('Chicken Masala', 180.00, 'Non Veg', 1),
+('Kadai Chicken', 180.00, 'Non Veg', 1),
+('Chicken Tikka Masala', 200.00, 'Non Veg', 1),
+('Butter Chicken', 220.00, 'Non Veg', 1),
+('Tandoori Chicken Masala', 220.00, 'Non Veg', 1),
+('Mutton Kala Masala', 260.00, 'Non Veg', 1),
+('Mutton Masala', 260.00, 'Non Veg', 1),
+('Mutton Fry', 260.00, 'Non Veg', 1),
+('Fish Curry', 220.00, 'Non Veg', 1),
+('Pomfret Curry', 280.00, 'Non Veg', 1),
+('Prawns Curry', 280.00, 'Non Veg', 1),
+('Egg Curry', 140.00, 'Non Veg', 1),
 
-    -- 🍚 RICE
-    ('Plain Rice', 80.00, 'Rice', 1),
-    ('Jeera Rice', 100.00, 'Rice', 1),
-    ('Veg Biryani', 140.00, 'Rice', 1),
-    ('Chicken Biryani', 180.00, 'Rice', 1),
+-- 🍚 RICE / BIRYANI (page 4)
+('Veg Biryani', 140.00, 'Rice', 1),
+('Chicken Biryani', 160.00, 'Rice', 1),
+('Mutton Biryani', 240.00, 'Rice', 1),
+('Fish Biryani', 220.00, 'Rice', 1),
+('Prawns Biryani', 250.00, 'Rice', 1),
+('Egg Biryani', 140.00, 'Rice', 1),
+('Jeera Rice', 90.00, 'Rice', 1),
 
-    -- 🥤 DRINKS
-    ('Water Bottle', 20.00, 'Drinks', 1),
-    ('Cold Drink', 40.00, 'Drinks', 1),
-    ('Buttermilk', 30.00, 'Drinks', 1),
-    ('Lassi', 50.00, 'Drinks', 1),
+-- 🍞 BHAKRI / ROTI (page 9)
+('Jowar Bhakri', 25.00, 'Roti', 1),
+('Bajra Bhakri', 25.00, 'Roti', 1),
+('Rice Bhakri', 25.00, 'Roti', 1),
+('Nachni Bhakri', 30.00, 'Roti', 1),
+('Chapati', 15.00, 'Roti', 1),
+('Tawa Paratha', 20.00, 'Roti', 1),
 
-    -- 🍨 DESSERT
-    ('Gulab Jamun', 60.00, 'Dessert', 1),
-    ('Ice Cream', 80.00, 'Dessert', 1)
-  `);
+-- 🍢 STARTERS VEG (page 5)
+('Paneer Tikka', 180.00, 'Starter', 1),
+('Paneer Chilli', 140.00, 'Starter', 1),
+('Paneer Crispy', 180.00, 'Starter', 1),
+('Soyabean Crispy', 120.00, 'Starter', 1),
+
+-- 🍗 STARTERS NON VEG (page 6)
+('Chicken Tikka', 180.00, 'Starter', 1),
+('Tandoori Chicken', 220.00, 'Starter', 1),
+('Chicken Seekh Kabab', 220.00, 'Starter', 1),
+('Chicken Sukka', 180.00, 'Starter', 1),
+('Chicken Fry', 200.00, 'Starter', 1),
+('Chicken 65', 200.00, 'Starter', 1),
+('Fish Fry', 200.00, 'Starter', 1),
+('Prawns Fry', 280.00, 'Starter', 1),
+
+-- 🍨 DESSERT (page 9)
+('Gulab Jamun (2 pcs)', 60.00, 'Dessert', 1),
+('Kheer', 100.00, 'Dessert', 1),
+
+-- 🥤 EXTRA
+('Masala Papad', 80.00, 'Extra', 1),
+('Roasted Papad', 60.00, 'Extra', 1),
+('Fried Papad', 60.00, 'Extra', 1)
+`);
 
   console.log('✅ Database ready with fresh data');
 }

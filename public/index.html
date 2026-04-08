@@ -232,6 +232,36 @@
 
     .menu-card { padding: 16px; }
 
+    .category-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .category-btn {
+      border: 1px solid #dce6f0;
+      background: #ffffff;
+      color: #243b53;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .category-btn:hover {
+      background: #eff6ff;
+      border-color: #8ec5ff;
+      color: #1677ff;
+    }
+
+    .category-btn.active {
+      background: #1677ff;
+      border-color: #1677ff;
+      color: #ffffff;
+    }
+
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -327,6 +357,7 @@
       padding: 28px 16px;
       color: #52667a;
       font-weight: 700;
+      grid-column: 1 / -1;
     }
 
     @media (max-width: 900px) {
@@ -423,15 +454,13 @@
         </div>
       </div>
 
+      <div id="categoryList" class="category-row"></div>
+
       <div id="menuList" class="menu-grid"></div>
     </div>
   </div>
 
   <script>
-    // =========================================================
-    // PASTE YOUR SERVER URL ONLY HERE
-    // When installing on another PC, change only this one line.
-    // =========================================================
     const APP_CONFIG = {
       BASE_URL: 'https://wala-backend.onrender.com',
     };
@@ -443,6 +472,7 @@
 
     const tableInfo = document.getElementById('tableInfo');
     const menuList = document.getElementById('menuList');
+    const categoryList = document.getElementById('categoryList');
     const message = document.getElementById('message');
     const searchInput = document.getElementById('searchInput');
     const itemCountEl = document.getElementById('itemCount');
@@ -458,6 +488,7 @@
 
     let menuData = [];
     let qtyMap = {};
+    let selectedCategory = 'All';
 
     function formatMoney(value) {
       return `₹${Number(value || 0).toFixed(0)}`;
@@ -498,6 +529,36 @@
       clearMessage();
     }
 
+    function selectCategory(category) {
+      selectedCategory = category;
+      renderCategories();
+      renderMenu();
+    }
+
+    function renderCategories() {
+      const categoryMap = {};
+
+      menuData.forEach((item) => {
+        const category = String(item.category || 'General').trim();
+        if (category) {
+          categoryMap[category] = true;
+        }
+      });
+
+      const categories = ['All', ...Object.keys(categoryMap)];
+
+      categoryList.innerHTML = categories
+        .map((category) => `
+          <button
+            class="category-btn ${selectedCategory === category ? 'active' : ''}"
+            onclick="selectCategory('${String(category).replace(/'/g, "\\'")}')"
+          >
+            ${category}
+          </button>
+        `)
+        .join('');
+    }
+
     async function loadMenu() {
       try {
         clearMessage();
@@ -518,11 +579,13 @@
 
         menuData = Array.isArray(data.data) ? data.data : [];
         qtyMap = {};
+        selectedCategory = 'All';
 
         menuData.forEach((item) => {
           qtyMap[item.id] = 0;
         });
 
+        renderCategories();
         renderMenu();
         updateSummary();
       } catch (e) {
@@ -536,8 +599,16 @@
 
       const filtered = menuData.filter((item) => {
         const name = String(item.name || '').toLowerCase();
-        const category = String(item.category || '').toLowerCase();
-        return !query || name.includes(query) || category.includes(query);
+        const category = String(item.category || 'General');
+        const categoryLower = category.toLowerCase();
+
+        const matchesSearch =
+          !query || name.includes(query) || categoryLower.includes(query);
+
+        const matchesCategory =
+          selectedCategory === 'All' || category === selectedCategory;
+
+        return matchesSearch && matchesCategory;
       });
 
       if (!filtered.length) {
