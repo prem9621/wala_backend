@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bhakriwala QR Sheet</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #f3f1ea;
+      --card: #fffdf8;
+      --line: #e4dccf;
+      --ink: #1f2a37;
+      --muted: #6b7280;
+      --brand: #8b5e3c;
+      --brand-dark: #6f482c;
+      --accent: #d9b382;
+      --soft: #f7efe3;
+      --gold: #c08a3c;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #fbf7ef 0%, #f3f1ea 42%, #ebe7dd 100%);
+      color: var(--ink);
+    }
+
+    .print-bar {
+      width: 210mm;
+      margin: 12px auto;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .print-btn,
+    .refresh-btn {
+      border: none;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(31, 42, 55, 0.12);
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .print-btn {
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+    }
+
+    .refresh-btn {
+      background: linear-gradient(135deg, #0f766e, #115e59);
+    }
+
+    .print-btn:hover,
+    .refresh-btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.96;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 18px;
+      padding: 9mm;
+      background: linear-gradient(180deg, #fffdf8 0%, #fffaf2 100%);
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(31, 42, 55, 0.08);
+      border: 1px solid rgba(139, 94, 60, 0.08);
+    }
+
+    .header {
+      position: relative;
+      text-align: center;
+      margin-bottom: 8mm;
+      padding: 18px 18px 16px;
+      border-radius: 22px;
+      background:
+        linear-gradient(135deg, rgba(139, 94, 60, 0.08), rgba(192, 138, 60, 0.06)),
+        linear-gradient(180deg, #fffaf4 0%, #fffdf9 100%);
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .header::before,
+    .header::after {
+      content: "";
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border-radius: 999px;
+      background: rgba(192, 138, 60, 0.08);
+      filter: blur(2px);
+    }
+
+    .header::before {
+      top: -40px;
+      left: -30px;
+    }
+
+    .header::after {
+      right: -25px;
+      bottom: -45px;
+      background: rgba(139, 94, 60, 0.08);
+    }
+
+    .brand-badge {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(192, 138, 60, 0.24);
+      color: var(--brand);
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      margin-bottom: 10px;
+      box-shadow: 0 10px 22px rgba(139, 94, 60, 0.08);
+    }
+
+    .brand-badge .emoji {
+      font-size: 18px;
+    }
+
+    .header h1 {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--ink);
+      letter-spacing: 0.2px;
+    }
+
+    .header p {
+      position: relative;
+      z-index: 1;
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .server-box {
+      position: relative;
+      z-index: 1;
+      margin-top: 12px;
+      display: inline-block;
+      padding: 9px 14px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid rgba(139, 94, 60, 0.16);
+      color: var(--brand-dark);
+      font-size: 13px;
+      font-weight: 800;
+      word-break: break-all;
+      box-shadow: 0 10px 22px rgba(31, 42, 55, 0.05);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6mm;
+    }
+
+    .card {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 6mm;
+      text-align: center;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 250, 242, 0.98) 100%);
+      box-shadow: 0 14px 28px rgba(31, 42, 55, 0.06);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top right, rgba(192, 138, 60, 0.08), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(139, 94, 60, 0.07), transparent 32%);
+      pointer-events: none;
+    }
+
+    .logo {
+      position: relative;
+      z-index: 1;
+      width: 46px;
+      height: 46px;
+      margin: 0 auto 8px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      background: linear-gradient(135deg, #fff8ef, #f6e7d1);
+      border: 1px solid rgba(192, 138, 60, 0.25);
+      box-shadow: 0 8px 18px rgba(139, 94, 60, 0.08);
+    }
+
+    .title {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.25;
+    }
+
+    .subtitle {
+      position: relative;
+      z-index: 1;
+      margin: 6px 0 10px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .qr-shell {
+      position: relative;
+      z-index: 1;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fff 0%, #fffaf1 100%);
+      border: 1px solid rgba(139, 94, 60, 0.14);
+      padding: 10px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+      margin-bottom: 10px;
+    }
+
+    .qr-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 170px;
+      padding: 4px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px dashed rgba(139, 94, 60, 0.16);
+    }
+
+    canvas {
+      max-width: 100%;
+      height: auto !important;
+    }
+
+    .table-pill {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: #fff;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+      box-shadow: 0 10px 20px rgba(111, 72, 44, 0.18);
+      margin-bottom: 8px;
+    }
+
+    .scan-note {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 8px;
+      font-size: 11px;
+      color: var(--brand-dark);
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
+
+    .url-text {
+      position: relative;
+      z-index: 1;
+      font-size: 10px;
+      color: var(--muted);
+      word-break: break-all;
+      line-height: 1.4;
+      padding: 0 4px;
+    }
+
+    .footer-note {
+      margin-top: 7mm;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .page,
+      .print-bar {
+        width: 100%;
+      }
+
+      .page {
+        min-height: auto;
+        padding: 14px;
+        border-radius: 0;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .print-bar {
+        display: none;
+      }
+
+      .page {
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0;
+        border: none;
+      }
+
+      .card {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="print-bar">
+    <button class="print-btn" onclick="window.print()">Print A4 QR Sheet</button>
+    <button class="refresh-btn" onclick="renderAllQrs()">Refresh QR</button>
+  </div>
+
+  <div class="page">
+    <div class="header">
+      <div class="brand-badge">
+        <span class="emoji">🍽️</span>
+        <span>Premium Table Ordering</span>
+      </div>
+      <h1>Bhakriwala Family Restaurant</h1>
+      <p>Scan the QR code on your table to view the menu and place your order</p>
+      <div class="server-box" id="serverUrlText"></div>
+    </div>
+
+    <div class="grid" id="qrGrid"></div>
+
+    <div class="footer-note">
+      Thank you for dining with Bhakriwala Family Restaurant
+    </div>
+  </div>
+
+  <script>
+    const CONFIG = {
+      totalTables: 12,
+      restaurantName: 'Bhakriwala Family Restaurant',
+
+      // IMPORTANT:
+      // Put your laptop IP here.
+      // Change only this line if IP changes in future.
+      fixedBaseUrl: 'http://10.188.27.157:5000',
+    };
+
+    const qrGrid = document.getElementById('qrGrid');
+    const serverUrlText = document.getElementById('serverUrlText');
+
+    function getBaseUrl() {
+      return CONFIG.fixedBaseUrl.trim();
+    }
+
+    function clearGrid() {
+      qrGrid.innerHTML = '';
+    }
+
+    function createCard(tableNo) {
+      const baseUrl = getBaseUrl();
+      const orderUrl = `${baseUrl}/order?table=${tableNo}`;
+
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      card.innerHTML = `
+        <div class="logo">🍽️</div>
+        <h2 class="title">${CONFIG.restaurantName}</h2>
+        <div class="subtitle">Scan to order from your table</div>
+        <div class="qr-shell">
+          <div class="qr-wrap">
+            <canvas id="qr-${tableNo}"></canvas>
+          </div>
+        </div>
+        <div class="table-pill">Table ${tableNo}</div>
+        <div class="scan-note">Quick Scan • Fast Order</div>
+        <div class="url-text">${orderUrl}</div>
+      `;
+
+      qrGrid.appendChild(card);
+
+      const canvas = document.getElementById(`qr-${tableNo}`);
+
+      QRCode.toCanvas(
+        canvas,
+        orderUrl,
+        {
+          width: 180,
+          margin: 1,
+          color: {
+            dark: '#1f2a37',
+            light: '#ffffff',
+          },
+        },
+        function (error) {
+          if (error) {
+            console.error('QR error for table', tableNo, error);
+          }
+        }
+      );
+    }
+
+    function renderAllQrs() {
+      clearGrid();
+      const baseUrl = getBaseUrl();
+      serverUrlText.innerText = `Server URL: ${baseUrl}`;
+
+      for (let i = 1; i <= CONFIG.totalTables; i++) {
+        createCard(i);
+      }
+    }
+
+    renderAllQrs();
+  </script>
+</body>
+</html>

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bhakriwala Family Restaurant</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #102a43;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .topbar {
+      background: #ffffff;
+      border: 1px solid #dce6f0;
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: 0 6px 14px rgba(16, 42, 67, 0.05);
+      margin-bottom: 16px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .logo-box {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: #eff6ff;
+      border: 1px solid #dce6f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .brand-subtitle {
+      margin: 4px 0 0;
+      color: #52667a;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .hero-card,
+    .summary-card,
+    .menu-card {
+      background: #ffffff;
+      border: 1px solid #dce6f0;
+      border-radius: 18px;
+      box-shadow: 0 6px 14px rgba(16, 42, 67, 0.05);
+    }
+
+    .hero-card { padding: 20px; }
+
+    .hero-card h2 {
+      margin: 0 0 8px;
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .hero-card p {
+      margin: 0;
+      color: #52667a;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .table-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1677ff;
+      font-weight: 800;
+      border: 1px solid #8ec5ff;
+    }
+
+    .customer-form {
+      margin-top: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .customer-form input,
+    .customer-form textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #dce6f0;
+      border-radius: 14px;
+      font-size: 14px;
+      outline: none;
+      background: #ffffff;
+      font-family: inherit;
+    }
+
+    .customer-form input:focus,
+    .customer-form textarea:focus {
+      border-color: #8ec5ff;
+    }
+
+    .customer-form textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .summary-card {
+      padding: 18px;
+      position: sticky;
+      top: 16px;
+      height: fit-content;
+    }
+
+    .summary-title {
+      margin: 0 0 12px;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      color: #243b53;
+      font-weight: 600;
+    }
+
+    .summary-total {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid #dce6f0;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .place-btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-top: 16px;
+      background: #1677ff;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .place-btn:hover { background: #0f66df; }
+
+    .place-btn:disabled {
+      background: #9dbfe9;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 12px;
+      min-height: 22px;
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .success { color: #15803d; }
+    .error { color: #dc2626; }
+
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .menu-header h3 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .search-box {
+      width: 280px;
+      max-width: 100%;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #dce6f0;
+      border-radius: 14px;
+      font-size: 14px;
+      outline: none;
+      background: #ffffff;
+    }
+
+    .search-box input:focus {
+      border-color: #8ec5ff;
+    }
+
+    .menu-card { padding: 16px; }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .item {
+      border: 1px solid #dce6f0;
+      border-radius: 16px;
+      padding: 14px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .item-name {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 800;
+      color: #102a43;
+    }
+
+    .item-category {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1677ff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .item-price {
+      white-space: nowrap;
+      font-size: 17px;
+      font-weight: 800;
+      color: #102a43;
+    }
+
+    .qty-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .qty-label {
+      color: #52667a;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qty-btn {
+      width: 34px;
+      height: 34px;
+      border: none;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1677ff;
+      font-size: 20px;
+      font-weight: 800;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .qty-btn:hover { background: #dcecff; }
+
+    .qty-value {
+      min-width: 24px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 28px 16px;
+      color: #52667a;
+      font-weight: 700;
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-card {
+        position: static;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .page { padding: 12px; }
+      .brand-title { font-size: 22px; }
+      .hero-card h2 { font-size: 22px; }
+      .menu-header h3 { font-size: 20px; }
+      .search-box { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <div class="brand-row">
+        <div class="logo-box">🍽️</div>
+        <div>
+          <h1 class="brand-title">Bhakriwala Family Restaurant</h1>
+          <p class="brand-subtitle">Simple customer ordering menu for table service</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-card">
+        <h2>Welcome to Bhakriwala Family Restaurant</h2>
+        <p>
+          Select your items, adjust quantity, and place your order directly from
+          your table.
+        </p>
+        <div class="table-chip" id="tableInfo">Table: 1</div>
+
+        <div class="customer-form">
+          <input
+            type="text"
+            id="customerName"
+            placeholder="Your name (optional)"
+          />
+          <input
+            type="tel"
+            id="customerPhone"
+            placeholder="Phone number (optional)"
+          />
+          <textarea
+            id="customerNote"
+            placeholder="Notes / special instructions (optional)"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="summary-card">
+        <h3 class="summary-title">Your Order</h3>
+        <div class="summary-row">
+          <span>Items</span>
+          <span id="itemCount">0</span>
+        </div>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotal">₹0</span>
+        </div>
+        <div class="summary-total">
+          <span>Total</span>
+          <span id="grandTotal">₹0</span>
+        </div>
+
+        <button id="placeBtn" class="place-btn" onclick="placeOrder()">
+          Place Order
+        </button>
+
+        <div id="message" class="message"></div>
+      </div>
+    </div>
+
+    <div class="menu-card">
+      <div class="menu-header">
+        <h3>Menu</h3>
+        <div class="search-box">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search menu item..."
+            oninput="renderMenu()"
+          />
+        </div>
+      </div>
+
+      <div id="menuList" class="menu-grid"></div>
+    </div>
+  </div>
+
+  <script>
+    const APP_CONFIG = {
+      BASE_URL: window.location.origin,
+    };
+
+    const BASE_URL = APP_CONFIG.BASE_URL;
+
+    const params = new URLSearchParams(window.location.search);
+    const tableId = params.get('table') || '1';
+
+    const tableInfo = document.getElementById('tableInfo');
+    const menuList = document.getElementById('menuList');
+    const message = document.getElementById('message');
+    const searchInput = document.getElementById('searchInput');
+    const itemCountEl = document.getElementById('itemCount');
+    const subtotalEl = document.getElementById('subtotal');
+    const grandTotalEl = document.getElementById('grandTotal');
+    const placeBtn = document.getElementById('placeBtn');
+
+    const customerNameEl = document.getElementById('customerName');
+    const customerPhoneEl = document.getElementById('customerPhone');
+    const customerNoteEl = document.getElementById('customerNote');
+
+    tableInfo.innerText = `Table: ${tableId}`;
+
+    let menuData = [];
+    let qtyMap = {};
+
+    function formatMoney(value) {
+      return `₹${Number(value || 0).toFixed(0)}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function showMessage(text, type) {
+      message.className = `message ${type}`;
+      message.innerText = text;
+    }
+
+    function clearMessage() {
+      message.className = 'message';
+      message.innerText = '';
+    }
+
+    function updateSummary() {
+      let itemCount = 0;
+      let subtotal = 0;
+
+      menuData.forEach((item) => {
+        const qty = Number(qtyMap[item.id] || 0);
+        itemCount += qty;
+        subtotal += qty * Number(item.price || 0);
+      });
+
+      itemCountEl.innerText = itemCount;
+      subtotalEl.innerText = formatMoney(subtotal);
+      grandTotalEl.innerText = formatMoney(subtotal);
+      placeBtn.disabled = itemCount === 0;
+    }
+
+    function changeQty(itemId, delta) {
+      const current = Number(qtyMap[itemId] || 0);
+      const next = Math.max(0, current + delta);
+      qtyMap[itemId] = next;
+      renderMenu();
+      updateSummary();
+      clearMessage();
+    }
+
+    async function loadMenu() {
+      try {
+        clearMessage();
+
+        const res = await fetch(`${BASE_URL}/api/orders/menu`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          showMessage(data.message || 'Failed to load menu', 'error');
+          return;
+        }
+
+        menuData = Array.isArray(data.data) ? data.data : [];
+        qtyMap = {};
+
+        menuData.forEach((item) => {
+          qtyMap[item.id] = 0;
+        });
+
+        renderMenu();
+        updateSummary();
+      } catch (e) {
+        console.error('Load menu error:', e);
+        showMessage('Error loading menu. Check server and Wi-Fi.', 'error');
+      }
+    }
+
+    function renderMenu() {
+      const query = searchInput.value.trim().toLowerCase();
+
+      const filtered = menuData.filter((item) => {
+        const name = String(item.name || '').toLowerCase();
+        const category = String(item.category || '').toLowerCase();
+        return !query || name.includes(query) || category.includes(query);
+      });
+
+      if (!filtered.length) {
+        menuList.innerHTML = `<div class="empty-state">No menu items found</div>`;
+        return;
+      }
+
+      menuList.innerHTML = filtered
+        .map((item) => {
+          const qty = Number(qtyMap[item.id] || 0);
+
+          return `
+            <div class="item">
+              <div class="item-top">
+                <div>
+                  <h4 class="item-name">${escapeHtml(item.name)}</h4>
+                  <div class="item-category">${escapeHtml(item.category || 'General')}</div>
+                </div>
+                <div class="item-price">${formatMoney(item.price)}</div>
+              </div>
+
+              <div class="qty-row">
+                <div class="qty-label">Select Qty</div>
+                <div class="qty-controls">
+                  <button class="qty-btn" type="button" onclick="changeQty(${Number(item.id)}, -1)">−</button>
+                  <div class="qty-value">${qty}</div>
+                  <button class="qty-btn" type="button" onclick="changeQty(${Number(item.id)}, 1)">+</button>
+                </div>
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    async function placeOrder() {
+      const selectedItems = menuData
+        .map((item) => ({
+          item_name: item.name,
+          qty: Number(qtyMap[item.id] || 0),
+          price: Number(item.price || 0),
+        }))
+        .filter((item) => item.qty > 0);
+
+      if (!selectedItems.length) {
+        showMessage('Please select at least one item', 'error');
+        return;
+      }
+
+      try {
+        placeBtn.disabled = true;
+        placeBtn.innerText = 'Placing Order...';
+        clearMessage();
+
+        const res = await fetch(`${BASE_URL}/api/orders/create`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            table_id: tableId,
+            items: selectedItems,
+            customer_name: customerNameEl.value.trim(),
+            customer_phone: customerPhoneEl.value.trim(),
+            customer_note: customerNoteEl.value.trim(),
+          }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          showMessage(
+            `Order placed successfully: ${data.data.order_code}`,
+            'success'
+          );
+
+          Object.keys(qtyMap).forEach((key) => {
+            qtyMap[key] = 0;
+          });
+
+          customerNameEl.value = '';
+          customerPhoneEl.value = '';
+          customerNoteEl.value = '';
+
+          renderMenu();
+          updateSummary();
+        } else {
+          showMessage(data.message || 'Order failed', 'error');
+        }
+      } catch (e) {
+        console.error('Place order error:', e);
+        showMessage('Error placing order. Check server and Wi-Fi.', 'error');
+      } finally {
+        placeBtn.innerText = 'Place Order';
+        updateSummary();
+      }
+    }
+
+    loadMenu();
+  </script>
+</body>
+</html>

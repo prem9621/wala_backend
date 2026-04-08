@@ -1,0 +1,77 @@
+# =========================
+# 1. Operating System Files
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# 2. IDE / Editor Settings
+# =========================
+.vscode/
+.idea/
+*.iml
+
+# =========================
+# 3. Logs & Temporary Files
+# =========================
+*.log
+*.tmp
+*.temp
+*.swp
+
+# =========================
+# 4. Environment / Secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# 5. Dependencies
+# =========================
+node_modules/
+vendor/
+
+# =========================
+# 6. Build / Output
+# =========================
+build/
+dist/
+out/
+target/
+
+# =========================
+# 7. Cache Files
+# =========================
+.cache/
+*.cache
+
+# =========================
+# 8. Database Files
+# =========================
+*.db
+*.sqlite
+
+# =========================
+# 9. Language / Framework Specific
+# =========================
+
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub/
+build/
+ios/Pods/
+android/.gradle/
+
+# Node.js
+npm-debug.log*
+yarn-error.log*
+
+# =========================
+# 10. Miscellaneous
+# =========================
+*.bak
+*.old
+*.backup
